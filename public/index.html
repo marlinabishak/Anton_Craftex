@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Anton Craftex - PatchMagic & Divine Foods</title>
+<meta name="description" content="Handcrafted home décor and wellness foods from Thethurai Village. Supporting rural artisans and women empowerment.">
+<meta name="theme-color" content="#B85C2B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="/style.css?v=5">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header id="header">
+  <div class="header-top">
+    <div class="container">
+      <div class="logo-wrap">
+        <div class="logo">
+          <span class="logo-main">Anton Craftex</span>
+          <span class="logo-sub">Craft Park • Patch Magic • Divine Foods</span>
+        </div>
+      </div>
+      <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="Search products, brands, categories…" autocomplete="off">
+        <button onclick="doSearch()" class="btn-search">Search</button>
+        <div id="searchDropdown" class="search-dropdown hidden"></div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-icon hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Toggle menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+          <span>Menu</span>
+        </button>
+        <button class="btn-icon" onclick="toggleUserMenu()" id="userBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <span id="userLabel">Account</span>
+        </button>
+        <button class="btn-icon cart-btn" onclick="toggleCartDrawer()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <nav class="nav-bar">
+    <div class="container nav-links">
+      <a href="#" onclick="showPage('home')" class="nav-link">Home</a>
+       <a href="#" onclick="showPage('patchmagic')" class="nav-link pm">🎨 PatchMagic</a>
+       <a href="#" onclick="showPage('divine-foods')" class="nav-link df">🌿 Divine Foods</a>
+      <a href="#" onclick="showPage('memory-crafts')" class="nav-link">Memory Crafts</a>
+      <a href="#" onclick="showPage('craft-park')" class="nav-link">Craft Park</a>
+      <a href="#" onclick="showPage('track')" class="nav-link">Track Order</a>
+    </div>
+    <div class="container mobile-nav" id="mobile-nav">
+      <a href="#" onclick="showPage('home')" class="mobile-nav-link">Home</a>
+       <a href="#" onclick="showPage('patchmagic')" class="mobile-nav-link">Patch Magic</a>
+       <a href="#" onclick="showPage('divine-foods')" class="mobile-nav-link">Divine Foods</a>
+      <a href="#" onclick="showPage('memory-crafts')" class="mobile-nav-link">Memory Crafts</a>
+      <a href="#" onclick="showPage('craft-park')" class="mobile-nav-link">Craft Park</a>
+      <a href="#" onclick="showPage('track')" class="mobile-nav-link">Track Order</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ===== USER MENU DROPDOWN ===== -->
+<div id="userMenu" class="user-menu hidden">
+  <div id="guestMenu">
+    <a onclick="showModal('loginModal')">Login</a>
+    <a onclick="showModal('registerModal')">Register</a>
+    <a onclick="showModal('orderHistoryModal')">My Orders (Guest)</a>
+  </div>
+  <div id="loggedMenu" class="hidden">
+    <span id="menuUserName"></span>
+    <a onclick="showPage('track'); switchTrackTab('history')">My Orders</a>
+    <a onclick="doLogout()">Logout</a>
+  </div>
+</div>
+
+<!-- ===== PAGES ===== -->
+<main id="app">
+
+<!-- HOME PAGE -->
+<div id="page-home" class="page active">
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Thethurai Village, Tamil Nadu</div>
+      <h1>Anton Craftex</h1>
+      <p class="hero-sub">A rural craft-wellness brand built around PatchMagic, Divine Foods, and Craft Park. Designed for premium retail, women-led production, and sustainable village growth.</p>
+      <div class="hero-btns">
+        <button onclick="showPage('patchmagic')" class="btn btn-primary">🎨 Explore PatchMagic</button>
+        <button onclick="showPage('divine-foods')" class="btn btn-secondary">🌿 Explore Divine Foods</button>
+        <button onclick="showPage('craft-park')" class="btn btn-outline">🏡 Visit Craft Park</button>
+      </div>
+    </div>
+    <div class="hero-image-col">
+      <div class="hero-image-panel">
+        <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=900&q=80" alt="Anton Craftex craft and wellness showcase" loading="eager">
+      </div>
+      <div class="hero-img-card hero-img-2">
+        <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&q=80" alt="Handcrafted textile detail" loading="eager">
+      </div>
+      <div class="hero-img-card hero-img-3">
+        <img src="https://images.unsplash.com/photo-1471193945509-9ad0617afabf?w=600&q=80" alt="Artisan wellness products" loading="eager">
+      </div>
+    </div>
+  </div>
+
+  <!-- Brands Section -->
+  <section class="brands-section container">
+    <div class="brand-card patchmagic-card" onclick="showPage('patchmagic')">
+      <div class="brand-icon">🎨</div>
+      <h2>PatchMagic</h2>
+      <p>Premium home décor and memory crafts re-packaged for modern homes and gifting.</p>
+      <ul>
+        <li>Baby Quilts &amp; Cradle Sets</li>
+        <li>Hand-Tufted Wool Rugs</li>
+        <li>Korai &amp; Jute Mats</li>
+        <li>Memory &amp; Personalized Crafts</li>
+      </ul>
+      <button class="btn btn-pm" type="button" onclick="showPage('patchmagic')">Shop PatchMagic →</button>
+    </div>
+    <div class="brand-card divine-card" onclick="showPage('divine-foods')">
+      <div class="brand-icon">🌿</div>
+      <h2>Divine Foods</h2>
+      <p>Clean-label wellness foods packaged for daily use, gifting, and repeat purchase.</p>
+      <ul>
+        <li>Vegetable Atta (Beetroot, Carrot, Spinach)</li>
+        <li>Karupatti Coffee &amp; Wellness Drinks</li>
+        <li>Raw Forest Honey</li>
+        <li>V3 Millet Products</li>
+      </ul>
+      <button class="btn btn-df" type="button" onclick="showPage('divine-foods')">Shop Divine Foods →</button>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="container section">
+    <div class="section-header">
+      <h2>Featured Products</h2>
+      <a href="#" onclick="showPage('shop')" class="see-all">View All →</a>
+    </div>
+    <div class="home-rail-shell">
+      <div class="home-rail-head">
+        <h3>Patch Magic Picks</h3>
+        <div class="rail-controls">
+          <button type="button" class="rail-btn" onclick="scrollRail('featuredRail', -1)">‹</button>
+          <button type="button" class="rail-btn" onclick="scrollRail('featuredRail', 1)">›</button>
+        </div>
+      </div>
+      <div id="featuredRail" class="home-rail"></div>
+    </div>
+    <div class="home-rail-shell">
+      <div class="home-rail-head">
+        <h3>Divine Foods</h3>
+        <div class="rail-controls">
+          <button type="button" class="rail-btn" onclick="scrollRail('foodsRail', -1)">‹</button>
+          <button type="button" class="rail-btn" onclick="scrollRail('foodsRail', 1)">›</button>
+        </div>
+      </div>
+      <div id="foodsRail" class="home-rail"></div>
+    </div>
+  </section>
+
+  <!-- Craft Park Banner -->
+  <section class="craftpark-banner">
+    <div class="container">
+      <div class="cp-banner-grid">
+        <div class="cp-banner-image">
+          <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=900&q=80" alt="Craft park landscape" loading="lazy">
+        </div>
+        <div class="cp-content">
+          <h2>Anton Craftex Craft Park</h2>
+          <p><strong>Thethurai Village, Cheyyar Taluk, Tamil Nadu</strong></p>
+          <p>A thoughtful rural hub for craft workshops, eco-tourism, permaculture, and women empowerment, just 100km from Chennai.</p>
+          <div class="cp-features">
+            <span>🌱 Permaculture Zones</span>
+            <span>🏺 Craft Demonstrations</span>
+            <span>🎓 Training Workshops</span>
+            <span>🏛️ Heritage Museum</span>
+            <span>🛒 Farm Store</span>
+          </div>
+          <button class="btn btn-primary" onclick="showPage('craft-park')">Explore Craft Park</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats-bar">
+    <div class="container stats-grid">
+      <div class="stat"><strong>50+</strong><span>Women Artisans</span></div>
+      <div class="stat"><strong>200+</strong><span>Products</span></div>
+      <div class="stat"><strong>15km</strong><span>from Vandavasi</span></div>
+      <div class="stat"><strong>100km</strong><span>from Chennai</span></div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter-section">
+    <div class="container">
+      <h3>Stay Connected with Anton Craftex</h3>
+        <p>Get updates on new collections, craft workshops, and seasonal wellness products.</p>
+      <form onsubmit="subscribeNewsletter(event)" class="newsletter-form">
+        <input type="text" placeholder="Your name" id="nlName">
+        <input type="email" placeholder="Your email" id="nlEmail" required>
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </form>
+    </div>
+  </section>
+</div>
+
+<!-- PATCHMAGIC PAGE -->
+<div id="page-patchmagic" class="page brand-page">
+  <section class="brand-hero brand-hero--patchmagic">
+    <div class="container brand-hero-grid">
+      <div class="brand-hero-copy">
+        <p class="section-eyebrow">PatchMagic</p>
+        <h1>Heirloom home decor with a modern retail finish.</h1>
+        <p>PatchMagic turns quilts, rugs, jute, clay, and memory crafts into premium collections built for gifting, interiors, and custom stories.</p>
+        <div class="hero-btns">
+          <button class="btn btn-primary" type="button" onclick="filterBrand('patchmagic')">Shop PatchMagic</button>
+          <button class="btn btn-outline" type="button" onclick="showPage('memory-crafts')">Memory Crafts</button>
+        </div>
+        <div class="brand-metrics">
+          <div class="brand-metric"><strong id="patchmagicCount">0</strong><span>Products</span></div>
+          <div class="brand-metric"><strong>4</strong><span>Core categories</span></div>
+          <div class="brand-metric"><strong>100%</strong><span>Handmade story</span></div>
+        </div>
+      </div>
+      <div class="brand-hero-visual">
+        <div class="brand-hero-frame">
+          <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=1200&q=80" alt="PatchMagic collection showcase" loading="eager">
+        </div>
+        <div class="brand-hero-stack">
+          <div class="brand-hero-note">Bold patchwork palettes</div>
+          <div class="brand-hero-note">Boutique-friendly display sets</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="container brand-grid-section">
+    <div class="brand-section-head">
+      <h2>Signature collections</h2>
+      <p>Browse the product families that define the PatchMagic range.</p>
+    </div>
+    <div class="brand-chip-grid">
+      <button class="brand-chip" type="button" onclick="filterCategory('quilts-textiles')">Quilts &amp; Textiles</button>
+      <button class="brand-chip" type="button" onclick="filterCategory('wool-rugs')">Hand-Tufted Rugs</button>
+      <button class="brand-chip" type="button" onclick="filterCategory('jute-korai-mats')">Jute &amp; Korai</button>
+      <button class="brand-chip" type="button" onclick="filterCategory('memory-crafts')">Memory Crafts</button>
+    </div>
+  </section>
+  <section class="container brand-rail-shell">
+    <div class="home-rail-head">
+      <h3>Featured PatchMagic picks</h3>
+      <div class="rail-controls">
+        <button type="button" class="rail-btn" onclick="scrollRail('patchmagicRail', -1)">‹</button>
+        <button type="button" class="rail-btn" onclick="scrollRail('patchmagicRail', 1)">›</button>
+      </div>
+    </div>
+    <div id="patchmagicRail" class="home-rail brand-rail"></div>
+  </section>
+  <section class="container brand-story-grid">
+    <article class="brand-story-card">
+      <p class="section-eyebrow">Made in Thethurai</p>
+      <h3>Rooted in village craft</h3>
+      <p>Every piece is shaped around rural women-led production, local materials, and a strong handmade identity.</p>
+    </article>
+    <article class="brand-story-card">
+      <p class="section-eyebrow">Retail ready</p>
+      <h3>Designed for premium shelves</h3>
+      <p>Product styling, pricing, and packaging are built for boutiques, gifting, and modern e-commerce.</p>
+    </article>
+    <article class="brand-story-card">
+      <p class="section-eyebrow">Personal story</p>
+      <h3>Memory-led collections</h3>
+      <p>Custom keepsakes bring a personal, emotional layer to the wider PatchMagic range.</p>
+    </article>
+  </section>
+  <section class="container brand-cta-band">
+    <div>
+      <p class="section-eyebrow">Need a bulk order?</p>
+      <h3>We can package PatchMagic for gifting, boutiques, and institutional orders.</h3>
+    </div>
+    <button class="btn btn-primary" type="button" onclick="showPage('shop')">Browse All Products</button>
+  </section>
+</div>
+
+<!-- DIVINE FOODS PAGE -->
+<div id="page-divine-foods" class="page brand-page">
+  <section class="brand-hero brand-hero--divine">
+    <div class="container brand-hero-grid">
+      <div class="brand-hero-copy">
+        <p class="section-eyebrow">Divine Foods</p>
+        <h1>Clean-label wellness foods with everyday usefulness.</h1>
+        <p>Divine Foods brings together atta, drinks, honey, millet blends, and traditional nutrition products in a polished retail format.</p>
+        <div class="hero-btns">
+          <button class="btn btn-primary" type="button" onclick="filterBrand('divine_foods')">Shop Divine Foods</button>
+          <button class="btn btn-outline" type="button" onclick="showPage('craft-park')">Craft Park</button>
+        </div>
+        <div class="brand-metrics">
+          <div class="brand-metric"><strong id="divineFoodsCount">0</strong><span>Products</span></div>
+          <div class="brand-metric"><strong>5</strong><span>Nutrition ranges</span></div>
+          <div class="brand-metric"><strong>Daily</strong><span>Use-friendly formats</span></div>
+        </div>
+      </div>
+      <div class="brand-hero-visual">
+        <div class="brand-hero-frame">
+          <img src="https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=1200&q=80" alt="Divine Foods collection showcase" loading="eager">
+        </div>
+        <div class="brand-hero-stack">
+          <div class="brand-hero-note">Premium wellness pantry</div>
+          <div class="brand-hero-note">Repeat purchase staples</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="container brand-grid-section">
+    <div class="brand-section-head">
+      <h2>Wellness categories</h2>
+      <p>Explore the product groups made for family kitchens and practical daily use.</p>
+    </div>
+    <div class="brand-chip-grid">
+      <button class="brand-chip" type="button" onclick="filterCategory('vegetable-atta')">Vegetable Atta</button>
+      <button class="brand-chip" type="button" onclick="filterCategory('wellness-drinks')">Wellness Drinks</button>
+      <button class="brand-chip" type="button" onclick="filterCategory('honey-sweeteners')">Honey &amp; Sweeteners</button>
+      <button class="brand-chip" type="button" onclick="filterCategory('millet-products')">Millet Products</button>
+    </div>
+  </section>
+  <section class="container brand-rail-shell">
+    <div class="home-rail-head">
+      <h3>Featured Divine Foods picks</h3>
+      <div class="rail-controls">
+        <button type="button" class="rail-btn" onclick="scrollRail('divineFoodsRail', -1)">‹</button>
+        <button type="button" class="rail-btn" onclick="scrollRail('divineFoodsRail', 1)">›</button>
+      </div>
+    </div>
+    <div id="divineFoodsRail" class="home-rail brand-rail"></div>
+  </section>
+  <section class="container brand-story-grid">
+    <article class="brand-story-card">
+      <p class="section-eyebrow">Everyday nutrition</p>
+      <h3>Built for regular use</h3>
+      <p>Products are sized and positioned for breakfast, cooking, and pantry staples.</p>
+    </article>
+    <article class="brand-story-card">
+      <p class="section-eyebrow">Better ingredient story</p>
+      <h3>Clean-label positioning</h3>
+      <p>The range focuses on traditional inputs, reduced compromise, and clear product intent.</p>
+    </article>
+    <article class="brand-story-card">
+      <p class="section-eyebrow">Retail appeal</p>
+      <h3>Strong shelf presence</h3>
+      <p>Packaging and display are intended to feel modern, premium, and easy to browse online.</p>
+    </article>
+  </section>
+  <section class="container brand-cta-band brand-cta-band--green">
+    <div>
+      <p class="section-eyebrow">Bulk and repeat orders</p>
+      <h3>Divine Foods is ready for repeat buyers, gifting, and natural food shelves.</h3>
+    </div>
+    <button class="btn btn-primary" type="button" onclick="showPage('shop')">Browse All Products</button>
+  </section>
+</div>
+
+<!-- MEMORY CRAFTS PAGE -->
+<div id="page-memory-crafts" class="page">
+  <div class="container">
+    <div class="craftpark-banner craftpark-banner--page memory-hero">
+      <div class="cp-banner-grid">
+        <div class="cp-content">
+          <p class="section-eyebrow">Memory Crafting</p>
+          <h2>Keepsakes With Meaning</h2>
+          <p>A thoughtful collection of custom memory crafts that preserve love, milestones, and family stories in tangible form.</p>
+          <div class="cp-features">
+            <span>Fabric quilts</span>
+            <span>Memory bears</span>
+            <span>Resin keepsakes</span>
+            <span>Personalized tributes</span>
+          </div>
+          <button class="btn btn-primary" onclick="showModal('loginModal')">Start a Memory Craft Request</button>
+        </div>
+        <div class="cp-banner-image">
+          <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=1000&q=80" alt="Memory craft inspiration" loading="lazy">
+        </div>
+      </div>
+    </div>
+    <div class="section-header">
+      <h2 class="section-title">Popular Memory Craft Ideas</h2>
+      <p class="section-desc">Custom-made keepsakes designed with care for remembrance, celebration, and family heritage.</p>
+    </div>
+    <div class="memory-grid memory-grid--page">
+      <div class="memory-card"><div class="mc-icon">🧵</div><h3>Fabric Quilts</h3><p>Transform cherished garments into comforting quilts.</p></div>
+      <div class="memory-card"><div class="mc-icon">🧸</div><h3>Memory Bears</h3><p>Soft keepsake bears made from special clothing.</p></div>
+      <div class="memory-card"><div class="mc-icon">🖼️</div><h3>Decorative Frames</h3><p>Personalized memorial frames with meaningful quotes.</p></div>
+      <div class="memory-card"><div class="mc-icon">🫙</div><h3>Memory Jars</h3><p>Curated memento jars that hold precious memories.</p></div>
+      <div class="memory-card"><div class="mc-icon">📦</div><h3>Memory Boxes</h3><p>Beautiful storage for letters, photos, and keepsakes.</p></div>
+      <div class="memory-card"><div class="mc-icon">🌸</div><h3>Resin Keepsakes</h3><p>Display bouquets and special items in resin art.</p></div>
+      <div class="memory-card"><div class="mc-icon">🪨</div><h3>Garden Stones</h3><p>Personal tribute stones for gardens and memorial spaces.</p></div>
+      <div class="memory-card"><div class="mc-icon">🎨</div><h3>Artistic Creations</h3><p>Mosaic and heirloom-inspired art from treasured items.</p></div>
+    </div>
+    <div class="memory-cta">
+      <h3>Need something deeply personal?</h3>
+      <p>We help you turn clothing, photos, and cherished objects into thoughtful keepsakes.</p>
+      <button class="btn btn-primary" onclick="showModal('enquiryModal')">Enquire About Memory Crafting</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP PAGE -->
+<div id="page-shop" class="page">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-eyebrow">Handpicked for you</p>
+      <h2 class="section-title">Our Collection</h2>
+    </div>
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" type="button" data-brand="" onclick="setBrandFilter('')">All Products</button>
+      <button class="filter-btn" type="button" data-brand="patchmagic" onclick="setBrandFilter('patchmagic')">Patch Magic</button>
+      <button class="filter-btn" type="button" data-brand="divine_foods" onclick="setBrandFilter('divine_foods')">Divine Foods</button>
+      <button class="filter-btn" type="button" data-brand="featured" onclick="showPage('home')">Featured</button>
+    </div>
+    <div class="shop-layout">
+      <aside class="sidebar">
+        <h3>Refine</h3>
+        <div class="filter-group">
+          <h4>Brand</h4>
+          <label><input type="radio" name="brand" value="" onchange="applyFilters()"> All</label>
+          <label><input type="radio" name="brand" value="patchmagic" onchange="applyFilters()"> Patch Magic</label>
+          <label><input type="radio" name="brand" value="divine_foods" onchange="applyFilters()"> Divine Foods</label>
+        </div>
+        <div class="filter-group">
+          <h4>Category</h4>
+          <div id="categoryFilters"></div>
+        </div>
+        <div class="filter-group">
+          <h4>Sort By</h4>
+          <select id="sortSelect" onchange="applyFilters()">
+            <option value="newest">Newest First</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="name">Name A-Z</option>
+          </select>
+        </div>
+      </aside>
+      <div class="shop-main">
+        <div class="shop-header">
+          <h2 id="shopTitle">All Products</h2>
+          <span id="productCount"></span>
+        </div>
+      <div id="shopProducts" class="products-grid"></div>
+        <div id="pagination" class="pagination"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT DETAIL PAGE -->
+<div id="page-product" class="page">
+  <div class="container">
+    <div class="breadcrumb"><a href="#" onclick="showPage('home')">Home</a> › <a href="#" onclick="showPage('shop')">Shop</a> › <span id="productBreadcrumb"></span></div>
+    <div class="product-detail-layout">
+      <div class="product-images">
+        <div id="mainImage" class="main-image"></div>
+        <div id="thumbImages" class="thumb-images"></div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand-badge" id="pdBrand"></div>
+        <h1 id="pdName"></h1>
+        <div class="product-rating" id="pdRating"></div>
+        <div class="product-price-wrap">
+          <span class="price-current" id="pdPrice"></span>
+          <span class="price-mrp" id="pdMrp"></span>
+          <span class="price-discount" id="pdDiscount"></span>
+        </div>
+        <p id="pdDesc" class="product-desc"></p>
+        <div id="pdOrigin" class="product-origin"></div>
+        <div id="pdStory" class="artisan-story"></div>
+        <div id="pdCustomNote" class="custom-note hidden">
+          <label>Customization / Special Instructions</label>
+          <textarea id="customNoteInput" placeholder="Describe your customization requirements..." rows="3"></textarea>
+        </div>
+        <div class="qty-add">
+          <div class="qty-control">
+            <button onclick="changeQty(-1)">−</button>
+            <span id="qtyDisplay">1</span>
+            <button onclick="changeQty(1)">+</button>
+          </div>
+          <button class="btn btn-primary btn-add-cart" id="addCartBtn" onclick="addToCartFromDetail()">Add to Cart</button>
+        </div>
+        <div id="pdStock" class="stock-info"></div>
+        <div class="product-meta">
+          <div id="pdMaterial"></div>
+          <div id="pdDimensions"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Reviews -->
+    <div class="reviews-section">
+      <h3>Customer Reviews</h3>
+      <div id="reviewsList"></div>
+      <div class="write-review">
+        <h4>Write a Review</h4>
+        <form onsubmit="submitReview(event)">
+          <div class="star-select" id="starSelect">
+            <span onclick="setRating(1)">★</span><span onclick="setRating(2)">★</span>
+            <span onclick="setRating(3)">★</span><span onclick="setRating(4)">★</span><span onclick="setRating(5)">★</span>
+          </div>
+          <input type="text" id="reviewTitle" placeholder="Review title">
+          <textarea id="reviewBody" placeholder="Share your experience..." rows="3"></textarea>
+          <input type="text" id="reviewName" placeholder="Your name (required)">
+          <button type="submit" class="btn btn-secondary">Submit Review</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cart-overlay"></div>
+<aside class="cart-drawer" id="cart-drawer" aria-label="Shopping cart">
+  <div class="cart-header">
+    <h2>Your Cart</h2>
+    <button class="cart-close-btn" id="cart-close-btn" aria-label="Close cart">✕</button>
+  </div>
+  <div class="cart-body" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter">
+    <div class="cart-totals">
+      <div class="cart-total-row"><span>Subtotal</span><span id="sumSubtotal">₹0</span></div>
+      <div class="cart-total-row"><span>Shipping</span><span id="sumShipping">₹0</span></div>
+      <div class="cart-total-row grand-total"><span>Grand Total</span><span id="sumTotal">₹0</span></div>
+    </div>
+    <button class="btn btn-primary btn-full" id="checkout-btn">Proceed to Checkout →</button>
+    <button class="btn btn-ghost btn-full" id="clear-cart-btn">Clear Cart</button>
+  </div>
+</aside>
+
+<!-- ORDER SUCCESS PAGE -->
+<div id="page-success" class="page">
+  <div class="container success-container">
+    <div class="success-icon">✅</div>
+    <h1>Order Confirmed!</h1>
+    <p class="success-order-no">Order Number: <strong id="successOrderNo"></strong></p>
+    <p>Thank you for supporting Anton Craftex and rural artisans! A confirmation email has been sent.</p>
+    <div class="refund-notice">
+      ⚡ You can cancel this order within <strong>30 minutes</strong> for an automatic refund.<br>
+      <a href="#" id="cancelOrderLink" onclick="showCancelForm()">Cancel Order</a>
+    </div>
+    <div id="cancelForm" class="cancel-form hidden">
+      <p>Are you sure you want to cancel order <strong id="cancelOrderNo2"></strong>?</p>
+      <input type="email" id="cancelEmail" placeholder="Confirm your email">
+      <button class="btn btn-danger" onclick="cancelOrder()">Yes, Cancel Order</button>
+    </div>
+    <div class="success-btns">
+      <button class="btn btn-primary" onclick="showPage('home')">Continue Shopping</button>
+      <button class="btn btn-secondary" onclick="showPage('track')">Track Order</button>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER TRACKING PAGE -->
+<div id="page-track" class="page">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-eyebrow">Order status</p>
+      <h2 class="section-title">Track Your Order</h2>
+    </div>
+    <div class="track-card">
+      <div class="track-options">
+        <div class="track-option active" id="tab-track" onclick="switchTrackTab('track')">Track by Order ID</div>
+        <div class="track-option" id="tab-history" onclick="switchTrackTab('history')">View All Orders</div>
+      </div>
+      <div id="trackForm">
+        <p>Enter your order number and email to track your order.</p>
+        <div class="form-group"><label>Order Number</label><input type="text" id="trackOrderNo" placeholder="ACX-20241201-0001"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="trackEmail" placeholder="email@example.com"></div>
+        <button class="btn btn-primary" onclick="trackOrder()">Track Order</button>
+        <div id="trackResult"></div>
+      </div>
+      <div id="historyForm" class="hidden">
+        <p>Enter your email to receive an OTP and view all your orders.</p>
+        <div class="form-group"><label>Email</label><input type="email" id="histEmail" placeholder="email@example.com"></div>
+        <button class="btn btn-primary" id="sendOtpBtn" onclick="sendOTP()">Send OTP</button>
+        <div id="otpSection" class="hidden">
+          <div class="form-group"><label>Enter OTP (sent to your email)</label><input type="text" id="otpInput" maxlength="6" placeholder="6-digit OTP"></div>
+          <button class="btn btn-primary" onclick="verifyOTP()">Verify OTP</button>
+        </div>
+        <div id="orderHistory" class="order-history-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT OVERLAY -->
+<div class="modal-overlay" id="checkout-overlay">
+  <div class="checkout-modal">
+    <button class="modal-close-btn" id="checkout-close-btn">✕</button>
+    <div class="checkout-step" id="step-delivery">
+      <div class="checkout-step-header"><span class="step-number">01</span><h2>Delivery Details</h2></div>
+      <div class="checkout-form">
+        <div class="form-row">
+          <div class="form-group"><label for="del-name">Full Name *</label><input type="text" id="del-name" placeholder="Your full name" /></div>
+          <div class="form-group"><label for="del-phone">Mobile *</label><input type="tel" id="del-phone" placeholder="+91 XXXXX XXXXX" /></div>
+        </div>
+        <div class="form-group"><label for="del-address">Address *</label><textarea id="del-address" rows="2" placeholder="House / Street / Area"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label for="del-city">City *</label><input type="text" id="del-city" placeholder="City" /></div>
+          <div class="form-group"><label for="del-state">State *</label><input type="text" id="del-state" placeholder="State" /></div>
+          <div class="form-group"><label for="del-pin">PIN Code *</label><input type="text" id="del-pin" placeholder="6-digit PIN" maxlength="6" /></div>
+        </div>
+        <div class="form-group"><label for="del-email">Email (for receipt)</label><input type="email" id="del-email" placeholder="you@example.com" /></div>
+        <button class="btn btn-primary btn-full" id="step-to-payment-btn">Continue to Payment →</button>
+      </div>
+    </div>
+    <div class="checkout-step hidden" id="step-payment">
+      <div class="checkout-step-header"><span class="step-number">02</span><h2>Payment</h2></div>
+      <div class="pay-summary">
+        <div class="pay-summary-row"><span>Subtotal</span><span id="pay-subtotal">₹0</span></div>
+        <div class="pay-summary-row"><span>Shipping</span><span id="pay-shipping">₹0</span></div>
+        <div class="pay-summary-row pay-total-row"><span>Total</span><span id="pay-total">₹0</span></div>
+      </div>
+      <div class="checkout-btns">
+        <button class="btn btn-outline" id="step-back-btn">Back</button>
+        <button class="btn btn-primary" onclick="initiatePayment()">Pay with Razorpay →</button>
+      </div>
+    </div>
+    <div class="checkout-step hidden" id="step-success">
+      <div class="success-animation"><div class="success-circle">✓</div></div>
+      <h2>Order Placed!</h2>
+      <p class="success-msg">Thank you for shopping with Anton Craftex.</p>
+      <button class="btn btn-primary btn-full" id="success-close-btn">Continue Shopping</button>
+    </div>
+  </div>
+</div>
+
+<!-- CRAFT PARK PAGE -->
+<div id="page-craft-park" class="page">
+  <section class="craftpark-banner craftpark-banner--page">
+    <div class="container cp-banner-grid">
+      <div class="cp-banner-image">
+        <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=1000&q=80" alt="Craft Park experience" loading="lazy">
+      </div>
+      <div class="cp-content">
+        <p class="section-eyebrow">Thethurai Village, Tamil Nadu</p>
+        <h2>Anton Craftex Craft Park</h2>
+        <p>A sustainable rural hub where heritage craft, wellness foods, women empowerment, and eco-tourism come together.</p>
+        <div class="cp-features">
+          <span>PatchMagic</span>
+          <span>Divine Foods</span>
+          <span>Women-led production</span>
+          <span>Eco-tourism</span>
+        </div>
+        <button class="btn btn-primary" onclick="showModal('enquiryModal')">Plan a Visit / Enquiry</button>
+      </div>
+    </div>
+  </section>
+  <div class="container">
+    <div class="cp-intro">
+      <h2>A Sustainable Rural Ecosystem</h2>
+      <p>Anton Craftex Craft Park is a unique rural craft-wellness hub integrating PatchMagic and Divine Foods.</p>
+    </div>
+    <div class="cp-impact-grid">
+      <div class="cp-impact-card"><strong>2 Brands</strong><span>PatchMagic and Divine Foods</span></div>
+      <div class="cp-impact-card"><strong>Women-led</strong><span>Production and training focus</span></div>
+      <div class="cp-impact-card"><strong>Zero waste</strong><span>Eco-friendly mission</span></div>
+      <div class="cp-impact-card"><strong>Retail + Tourism</strong><span>Visitor and buyer experience</span></div>
+    </div>
+    <div class="cp-locations">
+      <div class="cp-loc"><strong>📍 Chennai</strong><span>100 km</span></div>
+      <div class="cp-loc"><strong>📍 Sriperumbudur</strong><span>60 km</span></div>
+      <div class="cp-loc"><strong>📍 Kanchipuram</strong><span>30 km</span></div>
+      <div class="cp-loc"><strong>📍 Vandavasi</strong><span>15 km</span></div>
+      <div class="cp-loc"><strong>📍 Uthiramerur</strong><span>15 km</span></div>
+    </div>
+    <div class="cp-sections">
+      <div class="cp-block">
+        <h3>🌱 Permaculture Zones</h3>
+        <ul>
+          <li>Kitchen garden for wellness foods</li>
+          <li>Native plants &amp; medicinal shrubs</li>
+          <li>Shade trees for climate mitigation</li>
+          <li>Groundwater recharge pits</li>
+          <li>Grey-water reuse for garden</li>
+          <li>Atmospheric water generator</li>
+        </ul>
+      </div>
+      <div class="cp-block">
+        <h3>♻️ Zero Waste Production</h3>
+        <ul>
+          <li>Textile scraps → patchwork art</li>
+          <li>Food waste → compost</li>
+          <li>Zero plastic retail zone</li>
+          <li>Atmospheric water generator</li>
+        </ul>
+      </div>
+      <div class="cp-block">
+        <h3>🏛️ Eco-Showcase Spaces</h3>
+        <ul>
+          <li>Heritage Museum</li>
+          <li>Video kiosk</li>
+          <li>Govt schemes &amp; handloom history wall</li>
+          <li>Training hall</li>
+          <li>Demonstration units</li>
+        </ul>
+      </div>
+      <div class="cp-block">
+        <h3>📅 Experiences</h3>
+        <ul>
+          <li>Quilting workshops</li>
+          <li>Rug tufting demos</li>
+          <li>Monthly eco-market fair</li>
+          <li>Corporate gifting packages</li>
+          <li>Eco-tourism stays</li>
+        </ul>
+      </div>
+    </div>
+    <div class="cp-story-grid">
+      <div class="cp-block">
+        <h3>🧵 PatchMagic</h3>
+        <ul>
+          <li>Quilts &amp; textile crafts</li>
+          <li>Hand-tufted wool rugs</li>
+          <li>Jute rugs and korai mats</li>
+          <li>Clay art and decor</li>
+          <li>Memory crafts and personalization</li>
+        </ul>
+      </div>
+      <div class="cp-block">
+        <h3>🌿 Divine Foods</h3>
+        <ul>
+          <li>Vegetable atta and wellness mixes</li>
+          <li>Karupatti coffee and honey</li>
+          <li>Millet products and sprout powders</li>
+          <li>Detox soups and value-added foods</li>
+          <li>Repackaged premium retail line</li>
+        </ul>
+      </div>
+    </div>
+    <div class="cp-feature-grid">
+      <div class="cp-feature-card">
+        <h3>Craft Retail</h3>
+        <p>Curated home decor, gifts, and artisan products in a premium retail setting.</p>
+      </div>
+      <div class="cp-feature-card">
+        <h3>Workshop Studio</h3>
+        <p>Hands-on learning space for quilting, tufting, and sustainable craft practices.</p>
+      </div>
+      <div class="cp-feature-card">
+        <h3>Community Hub</h3>
+        <p>Women-led training, local sourcing, and a welcoming space for visitors.</p>
+      </div>
+    </div>
+    <div class="cp-visit-cta">
+      <h3>Institutional &amp; Market Reach</h3>
+      <p>Built for corporate gifting, boutique partnerships, resorts, spiritual centers, and weekend tourists.</p>
+    </div>
+    <div class="cp-enquiry">
+      <h2>Book a Visit or Enquire</h2>
+      <form onsubmit="submitEnquiry(event)" class="enquiry-form">
+        <div class="form-row">
+          <div class="form-group"><input type="text" id="enqName" placeholder="Your Name *" required></div>
+          <div class="form-group"><input type="email" id="enqEmail" placeholder="Email *" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><input type="tel" id="enqPhone" placeholder="Phone"></div>
+          <div class="form-group">
+            <select id="enqInterest">
+              <option value="workshop">Craft Workshop</option>
+              <option value="eco_tour">Eco-Tourism Visit</option>
+              <option value="corporate_gifting">Corporate Gifting</option>
+              <option value="bulk_order">Bulk Order</option>
+              <option value="volunteering">Volunteering</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group"><textarea id="enqMsg" placeholder="Tell us more..." rows="3"></textarea></div>
+        <button type="submit" class="btn btn-primary">Send Enquiry</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<div id="page-terms" class="page legal-page">
+  <div class="container legal-container">
+    <div class="legal-head">
+      <div>
+        <p class="section-eyebrow">Terms &amp; Conditions</p>
+        <h1>Anton Craftex</h1>
+      </div>
+      <button class="btn btn-outline" onclick="showPage('home')">← Back to Home</button>
+    </div>
+    <div class="legal-body">
+      <p><strong>Last updated:</strong> March 2025</p>
+      <h3>1. Acceptance</h3>
+      <p>By using this website, you agree to these Terms and Conditions.</p>
+      <h3>2. Use of the Website</h3>
+      <p>Use the site only for lawful purposes. Do not misuse, scrape, disrupt, or attempt unauthorized access.</p>
+      <h3>3. Intellectual Property</h3>
+      <p>All content, branding, and layouts on this website belong to Anton Craftex unless stated otherwise.</p>
+      <h3>4. Orders and Forms</h3>
+      <p>Information submitted through forms must be accurate. Submitting a form does not create an employment or service contract.</p>
+      <h3>5. Liability</h3>
+      <p>The website is provided as-is. We are not liable for indirect or consequential damages arising from use of the site.</p>
+      <h3>6. Changes</h3>
+      <p>We may update these terms at any time. Continued use of the website means you accept the updated version.</p>
+      <h3>7. Contact</h3>
+      <p>Anton Craftex<br>Thethurai Village, Cheyyar Taluk, Tamil Nadu, India<br>Email: projects@geoprana.com</p>
+    </div>
+  </div>
+</div>
+
+<div id="page-privacy" class="page legal-page">
+  <div class="container legal-container">
+    <div class="legal-head">
+      <div>
+        <p class="section-eyebrow">Privacy Policy</p>
+        <h1>Anton Craftex</h1>
+      </div>
+      <button class="btn btn-outline" onclick="showPage('home')">← Back to Home</button>
+    </div>
+    <div class="legal-body">
+      <p><strong>Last updated:</strong> March 2025</p>
+      <h3>1. Information We Collect</h3>
+      <p>We may collect contact details, order details, and basic device or usage information.</p>
+      <h3>2. How We Use It</h3>
+      <p>We use data to process orders, respond to enquiries, improve the site, and meet legal obligations.</p>
+      <h3>3. Sharing</h3>
+      <p>We do not sell your personal information. We may share it only with trusted providers or where required by law.</p>
+      <h3>4. Cookies</h3>
+      <p>Cookies may be used to improve site functionality and user experience.</p>
+      <h3>5. Your Rights</h3>
+      <p>You may request access, correction, or deletion of your personal data, subject to applicable law.</p>
+      <h3>6. Contact</h3>
+      <p>Anton Craftex<br>Thethurai Village, Cheyyar Taluk, Tamil Nadu, India<br>Email: projects@geoprana.com</p>
+    </div>
+  </div>
+</div>
+
+<div id="page-cookies" class="page legal-page">
+  <div class="container legal-container">
+    <div class="legal-head">
+      <div>
+        <p class="section-eyebrow">Cookies Policy</p>
+        <h1>Anton Craftex</h1>
+      </div>
+      <button class="btn btn-outline" onclick="showPage('home')">← Back to Home</button>
+    </div>
+    <div class="legal-body">
+      <p><strong>Last updated:</strong> March 2025</p>
+      <h3>1. What Cookies Are</h3>
+      <p>Cookies are small files stored on your device to help websites function properly.</p>
+      <h3>2. Why We Use Them</h3>
+      <p>We use cookies to support basic features, remember preferences, and improve performance.</p>
+      <h3>3. Your Control</h3>
+      <p>You can disable cookies in your browser settings, but some features may stop working correctly.</p>
+      <h3>4. Contact</h3>
+      <p>Anton Craftex<br>Thethurai Village, Cheyyar Taluk, Tamil Nadu, India<br>Email: projects@geoprana.com</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container footer-grid">
+    <div class="footer-col">
+      <h4>Anton Craftex</h4>
+      <p>Rural artisans, crafted products, and wellness food businesses.</p>
+      <p>🌿 Thethurai Village, Cheyyar Taluk, Tamil Nadu</p>
+      <div class="footer-social">
+        <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://wa.me/0000000000" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>PatchMagic</h4>
+      <a href="#" role="button" onclick="filterCategory('quilts-textiles'); return false;">Quilts &amp; Textiles</a>
+      <a href="#" role="button" onclick="filterCategory('wool-rugs'); return false;">Wool Rugs</a>
+      <a href="#" role="button" onclick="filterCategory('jute-korai-mats'); return false;">Jute &amp; Korai</a>
+      <a href="#" role="button" onclick="filterCategory('memory-crafts'); return false;">Memory Crafts</a>
+    </div>
+    <div class="footer-col">
+      <h4>Divine Foods</h4>
+      <a href="#" role="button" onclick="filterCategory('vegetable-atta'); return false;">Vegetable Atta</a>
+      <a href="#" role="button" onclick="filterCategory('wellness-drinks'); return false;">Wellness Drinks</a>
+      <a href="#" role="button" onclick="filterCategory('honey-sweeteners'); return false;">Raw Honey</a>
+      <a href="#" role="button" onclick="filterCategory('millet-products'); return false;">Millet Products</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <a href="#" role="button" onclick="showPage('track'); return false;">Track Order</a>
+      <a href="#" role="button" onclick="showPage('craft-park'); return false;">Craft Park</a>
+      <a href="#" role="button" onclick="showModal('loginModal'); return false;">Login / Register</a>
+    </div>
+  </div>
+  <div class="container footer-bottom-wrap">
+    <div class="footer-copy">&copy; 2024 Anton Craftex. All rights reserved.</div>
+    <div class="footer-links-inline footer-links-row">
+      <a href="#page-terms" onclick="showPage('terms'); return false;">Terms &amp; Conditions</a>
+      <a href="#page-privacy" onclick="showPage('privacy'); return false;">Privacy Policy</a>
+      <a href="#page-cookies" onclick="showPage('cookies'); return false;">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== MODALS ===== -->
+<div id="loginModal" class="modal hidden">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+    <h2>Login</h2>
+    <div class="form-group"><label>Email</label><input type="email" id="li_email" placeholder="email@example.com"></div>
+    <div class="form-group"><label>Password</label><input type="password" id="li_pass" placeholder="Your password"></div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()">Login</button>
+    <p class="modal-switch">Don't have an account? <a onclick="switchModal('loginModal','registerModal')">Register</a></p>
+    <div id="loginError" class="error-msg hidden"></div>
+  </div>
+</div>
+
+<div id="registerModal" class="modal hidden">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+    <h2>Create Account</h2>
+    <div class="form-group"><input type="text" id="reg_name" placeholder="Full Name *"></div>
+    <div class="form-group"><input type="email" id="reg_email" placeholder="Email *"></div>
+    <div class="form-group"><input type="tel" id="reg_phone" placeholder="Phone"></div>
+    <div class="form-group"><input type="password" id="reg_pass" placeholder="Password *"></div>
+    <button class="btn btn-primary btn-full" onclick="doRegister()">Create Account</button>
+    <p class="modal-switch">Already have an account? <a onclick="switchModal('registerModal','loginModal')">Login</a></p>
+    <div id="registerError" class="error-msg hidden"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anton Craftex Admin</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: #f7f2ec; color: #241912; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 24px; }
+    .shell { display: grid; gap: 20px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .topbar h1 { margin: 0; font-size: 28px; }
+    .topbar p { margin: 4px 0 0; color: #7a6455; }
+    .btn { border: 0; border-radius: 12px; padding: 11px 16px; cursor: pointer; font: inherit; font-weight: 700; }
+    .btn-primary { background: #b85c2b; color: #fff; }
+    .btn-danger { background: #c43d3d; color: #fff; }
+    .btn-ghost { background: #fff; border: 1px solid #dccbbf; color: #4d3a2f; }
+    .btn-sm { padding: 8px 12px; border-radius: 10px; font-size: 13px; }
+    .card { background: #fff; border: 1px solid #e5d7cc; border-radius: 20px; box-shadow: 0 12px 30px rgba(63, 38, 20, 0.06); }
+    .card-head { padding: 18px 20px; border-bottom: 1px solid #f0e4da; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .card-body { padding: 20px; }
+    .muted { color: #7a6455; }
+    .hidden { display: none !important; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+    .field { display: grid; gap: 6px; margin-bottom: 14px; }
+    .field label { font-size: 13px; font-weight: 700; color: #6d5849; }
+    input, select, textarea { width: 100%; border: 1px solid #dccbbf; border-radius: 12px; padding: 11px 12px; font: inherit; background: #fff; color: #241912; }
+    textarea { min-height: 100px; resize: vertical; }
+    .checkline { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .checkline input { width: auto; }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+    .stat { padding: 16px; border-radius: 18px; background: linear-gradient(180deg, #fff, #fbf5ef); border: 1px solid #eddccf; }
+    .stat strong { display: block; font-size: 28px; margin-bottom: 4px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 900px; }
+    th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid #f0e4da; vertical-align: top; }
+    th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #7a6455; }
+    td { font-size: 14px; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill { display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 999px; background: #f4ebe3; color: #7a4a2a; font-size: 12px; font-weight: 700; }
+    .pill.ok { background: #e6f4ea; color: #1f7a49; }
+    .pill.off { background: #f3f4f6; color: #6b7280; }
+    .login-wrap { max-width: 520px; margin: 72px auto; }
+    .login-card { padding: 24px; }
+    .toast { position: fixed; right: 16px; bottom: 16px; background: #241912; color: #fff; border-radius: 12px; padding: 12px 16px; box-shadow: 0 16px 40px rgba(0,0,0,.16); display: none; }
+    .toast.show { display: block; }
+    .section-grid { display: grid; gap: 20px; }
+    .section-grid .card { overflow: hidden; }
+    @media (max-width: 1100px) {
+      .grid-4, .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      .container { padding: 16px; }
+      .topbar h1 { font-size: 24px; }
+      .grid-4, .stats { grid-template-columns: 1fr; }
+      .card-head, .card-body { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="loginView" class="login-wrap">
+      <div class="card login-card">
+        <h1>Admin Login</h1>
+        <p class="muted">Sign in to manage products, categories, stock, orders, and refunds.</p>
+        <form id="loginForm">
+          <div class="field">
+            <label for="adminEmail">Email</label>
+            <input id="adminEmail" type="email" required>
+          </div>
+          <div class="field">
+            <label for="adminPassword">Password</label>
+            <input id="adminPassword" type="password" required>
+          </div>
+          <button class="btn btn-primary" type="submit">Login</button>
+        </form>
+        <p id="loginMsg" class="muted"></p>
+      </div>
+    </div>
+
+    <div id="appShell" class="shell hidden">
+      <div class="topbar">
+        <div>
+          <h1>Anton Craftex Admin</h1>
+          <p>Production dashboard for catalog, categories, and order operations.</p>
+        </div>
+        <div class="actions">
+          <button class="btn btn-ghost" id="refreshBtn" type="button">Refresh</button>
+          <button class="btn btn-danger" id="logoutBtn" type="button">Logout</button>
+        </div>
+      </div>
+
+      <section class="card">
+        <div class="card-head"><strong>Dashboard</strong><span class="muted">Live store overview</span></div>
+        <div class="card-body">
+          <div id="statsGrid" class="stats"></div>
+          <div class="grid-2" style="margin-top:16px;">
+            <div>
+              <h3>Low stock</h3>
+              <div id="lowStockList" class="muted"></div>
+            </div>
+            <div>
+              <h3>Recent orders</h3>
+              <div id="recentOrdersList" class="muted"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-grid grid-2">
+        <section class="card">
+          <div class="card-head">
+            <strong>Product Manager</strong>
+            <div class="actions">
+              <button class="btn btn-ghost btn-sm" id="resetProductBtn" type="button">New Product</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <form id="productForm">
+              <input type="hidden" id="productId">
+              <div class="grid-2">
+                <div class="field"><label>Name</label><input id="productName" required></div>
+                <div class="field"><label>Brand</label><select id="productBrand" required><option value="patchmagic">PatchMagic</option><option value="divine_foods">Divine Foods</option></select></div>
+              </div>
+              <div class="grid-2">
+                <div class="field"><label>Category</label><select id="productCategory" required></select></div>
+                <div class="field"><label>Price</label><input id="productPrice" type="number" step="0.01" required></div>
+              </div>
+              <div class="grid-3">
+                <div class="field"><label>MRP</label><input id="productMrp" type="number" step="0.01"></div>
+                <div class="field"><label>Price Min</label><input id="productPriceMin" type="number" step="0.01"></div>
+                <div class="field"><label>Price Max</label><input id="productPriceMax" type="number" step="0.01"></div>
+              </div>
+              <div class="grid-3">
+                <div class="field"><label>Stock</label><input id="productStock" type="number" step="1" value="0"></div>
+                <div class="field"><label>SKU</label><input id="productSku"></div>
+                <div class="field"><label>Tags</label><input id="productTags" placeholder="comma-separated"></div>
+              </div>
+              <div class="grid-2">
+                <div class="field"><label>Material</label><input id="productMaterial"></div>
+                <div class="field"><label>Origin</label><input id="productOrigin"></div>
+              </div>
+              <div class="grid-2">
+                <div class="field"><label>Short Description</label><textarea id="productShort"></textarea></div>
+                <div class="field"><label>Description</label><textarea id="productDesc"></textarea></div>
+              </div>
+              <div class="grid-2">
+                <div class="field"><label>Artisan Story</label><textarea id="productStory"></textarea></div>
+                <div class="field">
+                  <label>Image URLs</label>
+                  <textarea id="productImages" placeholder="/uploads/file.jpg or https://..."></textarea>
+                  <div class="muted" style="margin-top:6px;">Optional. Leave blank to keep current images while editing.</div>
+                </div>
+              </div>
+              <div class="grid-3">
+                <div class="field"><label>Upload Images</label><input id="productFiles" type="file" multiple accept="image/*"></div>
+                <div class="field">
+                  <label>Status</label>
+                  <div class="checkline"><input id="productActive" type="checkbox" checked><span>Active</span></div>
+                  <div class="checkline"><input id="productFeatured" type="checkbox"><span>Featured</span></div>
+                  <div class="checkline"><input id="productCustomizable" type="checkbox"><span>Customizable</span></div>
+                </div>
+                <div class="field">
+                  <label>&nbsp;</label>
+                  <button class="btn btn-primary" type="submit">Save Product</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <strong>Category Manager</strong>
+            <div class="actions">
+              <button class="btn btn-ghost btn-sm" id="resetCategoryBtn" type="button">New Category</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <form id="categoryForm">
+              <input type="hidden" id="categoryId">
+              <div class="grid-2">
+                <div class="field"><label>Name</label><input id="categoryName" required></div>
+                <div class="field"><label>Slug</label><input id="categorySlug" placeholder="auto-generated if blank"></div>
+              </div>
+              <div class="grid-2">
+                <div class="field"><label>Brand</label><select id="categoryBrand" required><option value="patchmagic">PatchMagic</option><option value="divine_foods">Divine Foods</option><option value="craftex">Craft Park</option></select></div>
+                <div class="field"><label>Sort Order</label><input id="categorySort" type="number" value="0"></div>
+              </div>
+              <div class="grid-2">
+                <div class="field"><label>Description</label><textarea id="categoryDesc"></textarea></div>
+                <div class="field"><label>Image URL</label><input id="categoryImage"></div>
+              </div>
+              <div class="grid-2">
+                <div class="field"><label>Status</label><div class="checkline"><input id="categoryActive" type="checkbox" checked><span>Active</span></div></div>
+                <div class="field" style="justify-content:end; display:flex; align-items:end;"><button class="btn btn-primary" type="submit">Save Category</button></div>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+
+      <div class="section-grid grid-2">
+        <section class="card">
+          <div class="card-head"><strong>Products</strong><span class="muted" id="productCountText">0 items</span></div>
+          <div class="card-body table-wrap"><table><thead><tr><th>Name</th><th>Brand</th><th>Category</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody id="productsTable"></tbody></table></div>
+        </section>
+        <section class="card">
+          <div class="card-head"><strong>Categories</strong><span class="muted" id="categoryCountText">0 items</span></div>
+          <div class="card-body table-wrap"><table><thead><tr><th>Name</th><th>Brand</th><th>Slug</th><th>Products</th><th>Status</th><th>Actions</th></tr></thead><tbody id="categoriesTable"></tbody></table></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const state = { products: [], categories: [], dashboard: null, user: null };
+
+    const $ = (id) => document.getElementById(id);
+    const esc = (value) => String(value ?? '').replace(/[&<>\"]/g, (m) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[m])).replace(/'/g, '&#39;');
+
+    function toast(msg) {
+      const el = $('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(el._t);
+      el._t = setTimeout(() => el.classList.remove('show'), 2800);
+    }
+
+    async function api(path, options = {}) {
+      const res = await fetch(path, {
+        credentials: 'include',
+        headers: { ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }), ...(options.headers || {}) },
+        ...options
+      });
+      let data = null;
+      try { data = await res.json(); } catch {}
+      if (!res.ok) throw new Error(data?.error || 'Request failed');
+      return data;
+    }
+
+    function showLogin(show) {
+      $('loginView').classList.toggle('hidden', !show);
+      $('appShell').classList.toggle('hidden', show);
+    }
+
+    function renderDashboard() {
+      const d = state.dashboard || {};
+      const revenue = d.revenue || {};
+      const users = d.users || {};
+      const cards = [
+        ['Total Orders', revenue.total_orders ?? 0],
+        ['Revenue', `₹${Number(revenue.total_revenue || 0).toFixed(0)}`],
+        ['Users', users.total_users ?? 0],
+        ['Today Orders', revenue.orders_today ?? 0]
+      ];
+      $('statsGrid').innerHTML = cards.map(([label, value]) => `<div class="stat"><strong>${esc(value)}</strong><div class="muted">${esc(label)}</div></div>`).join('');
+      $('lowStockList').innerHTML = (d.low_stock || []).length
+        ? `<ul>${d.low_stock.map((p) => `<li>${esc(p.name)} - ${esc(p.stock_qty)} left</li>`).join('')}</ul>`
+        : '<p>No low-stock products.</p>';
+      $('recentOrdersList').innerHTML = (d.recent_orders || []).length
+        ? `<ul>${d.recent_orders.map((o) => `<li>${esc(o.order_number)} - ${esc(o.status)} - ₹${Number(o.total || 0).toFixed(0)}</li>`).join('')}</ul>`
+        : '<p>No recent orders.</p>';
+    }
+
+    function renderCategorySelect() {
+      const selected = $('productCategory').value;
+      $('productCategory').innerHTML = state.categories.map((c) => `<option value="${c.id}">${esc(c.name)}${c.is_active ? '' : ' (inactive)'}</option>`).join('');
+      if (selected) $('productCategory').value = selected;
+    }
+
+    function renderProducts() {
+      $('productCountText').textContent = `${state.products.length} items`;
+      $('productsTable').innerHTML = state.products.map((p) => `
+        <tr>
+          <td><strong>${esc(p.name)}</strong><div class="muted">#${esc(p.id)}</div></td>
+          <td>${esc(p.brand)}</td>
+          <td>${esc(p.category_name || '')}</td>
+          <td>${esc(p.stock_qty ?? 0)}</td>
+          <td>${p.is_active ? '<span class="pill ok">Active</span>' : '<span class="pill off">Inactive</span>'}${p.is_featured ? ' <span class="pill">Featured</span>' : ''}</td>
+          <td>
+            <div class="actions">
+              <button class="btn btn-ghost btn-sm" type="button" onclick="editProduct(${p.id})">Edit</button>
+              <button class="btn btn-danger btn-sm" type="button" onclick="removeProduct(${p.id})">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderCategories() {
+      $('categoryCountText').textContent = `${state.categories.length} items`;
+      $('categoriesTable').innerHTML = state.categories.map((c) => `
+        <tr>
+          <td><strong>${esc(c.name)}</strong><div class="muted">#${esc(c.id)}</div></td>
+          <td>${esc(c.brand)}</td>
+          <td>${esc(c.slug)}</td>
+          <td>${esc(c.product_count || 0)}</td>
+          <td>${c.is_active ? '<span class="pill ok">Active</span>' : '<span class="pill off">Inactive</span>'}</td>
+          <td>
+            <div class="actions">
+              <button class="btn btn-ghost btn-sm" type="button" onclick="editCategory(${c.id})">Edit</button>
+              <button class="btn btn-danger btn-sm" type="button" onclick="removeCategory(${c.id})">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function resetProductForm() {
+      $('productForm').reset();
+      $('productId').value = '';
+      $('productBrand').value = 'patchmagic';
+      $('productActive').checked = true;
+      $('productFeatured').checked = false;
+      $('productCustomizable').checked = false;
+      renderCategorySelect();
+    }
+
+    function resetCategoryForm() {
+      $('categoryForm').reset();
+      $('categoryId').value = '';
+      $('categoryBrand').value = 'patchmagic';
+      $('categoryActive').checked = true;
+    }
+
+    function editProduct(id) {
+      const p = state.products.find((item) => String(item.id) === String(id));
+      if (!p) return;
+      $('productId').value = p.id;
+      $('productName').value = p.name || '';
+      $('productBrand').value = p.brand || 'patchmagic';
+      renderCategorySelect();
+      $('productCategory').value = p.category_id || '';
+      $('productPrice').value = p.price ?? '';
+      $('productMrp').value = p.mrp ?? '';
+      $('productPriceMin').value = p.price_min ?? '';
+      $('productPriceMax').value = p.price_max ?? '';
+      $('productStock').value = p.stock_qty ?? 0;
+      $('productSku').value = p.sku || '';
+      $('productTags').value = p.tags || '';
+      $('productMaterial').value = p.material || '';
+      $('productOrigin').value = p.origin || '';
+      $('productShort').value = p.short_description || '';
+      $('productDesc').value = p.description || '';
+      $('productStory').value = p.artisan_story || '';
+      $('productImages').value = Array.isArray(p.images) ? p.images.join(', ') : (p.images || '');
+      $('productActive').checked = !!Number(p.is_active);
+      $('productFeatured').checked = !!Number(p.is_featured);
+      $('productCustomizable').checked = !!Number(p.is_customizable);
+      toast(`Editing product #${p.id}`);
+    }
+
+    function editCategory(id) {
+      const c = state.categories.find((item) => String(item.id) === String(id));
+      if (!c) return;
+      $('categoryId').value = c.id;
+      $('categoryName').value = c.name || '';
+      $('categorySlug').value = c.slug || '';
+      $('categoryBrand').value = c.brand || 'patchmagic';
+      $('categoryDesc').value = c.description || '';
+      $('categoryImage').value = c.image_url || '';
+      $('categorySort').value = c.sort_order ?? 0;
+      $('categoryActive').checked = !!Number(c.is_active);
+      toast(`Editing category #${c.id}`);
+    }
+
+    async function loadData() {
+      const [dashboard, categories, products] = await Promise.all([
+        api('/api/admin/dashboard'),
+        api('/api/admin/categories'),
+        api('/api/admin/products')
+      ]);
+      state.dashboard = dashboard;
+      state.categories = categories.categories || [];
+      state.products = products.products || [];
+      renderDashboard();
+      renderCategorySelect();
+      renderProducts();
+      renderCategories();
+    }
+
+    async function checkSession() {
+      try {
+        state.dashboard = await api('/api/admin/dashboard');
+        showLogin(false);
+        await loadData();
+      } catch {
+        showLogin(true);
+      }
+    }
+
+    async function submitProduct(event) {
+      event.preventDefault();
+      const id = $('productId').value.trim();
+      const fd = new FormData();
+      fd.append('name', $('productName').value.trim());
+      fd.append('brand', $('productBrand').value);
+      fd.append('category_id', $('productCategory').value);
+      fd.append('price', $('productPrice').value);
+      if ($('productMrp').value) fd.append('mrp', $('productMrp').value);
+      if ($('productPriceMin').value) fd.append('price_min', $('productPriceMin').value);
+      if ($('productPriceMax').value) fd.append('price_max', $('productPriceMax').value);
+      fd.append('stock_qty', $('productStock').value || '0');
+      fd.append('sku', $('productSku').value.trim());
+      fd.append('tags', $('productTags').value.trim());
+      fd.append('material', $('productMaterial').value.trim());
+      fd.append('origin', $('productOrigin').value.trim());
+      fd.append('short_description', $('productShort').value.trim());
+      fd.append('description', $('productDesc').value.trim());
+      fd.append('artisan_story', $('productStory').value.trim());
+      fd.append('is_active', $('productActive').checked ? '1' : '0');
+      fd.append('is_featured', $('productFeatured').checked ? '1' : '0');
+      fd.append('is_customizable', $('productCustomizable').checked ? '1' : '0');
+      const urls = $('productImages').value.trim();
+      if (urls) fd.append('images', urls);
+      for (const file of $('productFiles').files || []) fd.append('images', file);
+
+      const endpoint = id ? `/api/admin/products/${id}` : '/api/admin/products';
+      const method = id ? 'PUT' : 'POST';
+      await api(endpoint, { method, body: fd });
+      toast(id ? 'Product updated' : 'Product created');
+      resetProductForm();
+      await loadData();
+    }
+
+    async function submitCategory(event) {
+      event.preventDefault();
+      const id = $('categoryId').value.trim();
+      const body = {
+        name: $('categoryName').value.trim(),
+        slug: $('categorySlug').value.trim(),
+        brand: $('categoryBrand').value,
+        description: $('categoryDesc').value.trim(),
+        image_url: $('categoryImage').value.trim(),
+        sort_order: $('categorySort').value || 0,
+        is_active: $('categoryActive').checked ? 1 : 0
+      };
+      const endpoint = id ? `/api/admin/categories/${id}` : '/api/admin/categories';
+      const method = id ? 'PUT' : 'POST';
+      await api(endpoint, { method, body: JSON.stringify(body) });
+      toast(id ? 'Category updated' : 'Category created');
+      resetCategoryForm();
+      await loadData();
+    }
+
+    async function removeProduct(id) {
+      if (!confirm('Delete this product?')) return;
+      const result = await api(`/api/admin/products/${id}`, { method: 'DELETE' });
+      toast(result.message || (result.action === 'deactivated' ? 'Product deactivated' : 'Product deleted'));
+      await loadData();
+    }
+
+    async function removeCategory(id) {
+      if (!confirm('Delete this category?')) return;
+      const result = await api(`/api/admin/categories/${id}`, { method: 'DELETE' });
+      toast(result.message || (result.action === 'deactivated' ? 'Category deactivated' : 'Category deleted'));
+      await loadData();
+    }
+
+    $('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      $('loginMsg').textContent = '';
+      try {
+        await api('/api/admin/login', {
+          method: 'POST',
+          body: JSON.stringify({ email: $('adminEmail').value, password: $('adminPassword').value })
+        });
+        showLogin(false);
+        await loadData();
+      } catch (err) {
+        $('loginMsg').textContent = err.message;
+      }
+    });
+
+    $('logoutBtn').addEventListener('click', async () => {
+      await api('/api/user/logout', { method: 'POST' });
+      state.products = [];
+      state.categories = [];
+      state.dashboard = null;
+      showLogin(true);
+      resetProductForm();
+      resetCategoryForm();
+      toast('Logged out');
+    });
+
+    $('refreshBtn').addEventListener('click', loadData);
+    $('productForm').addEventListener('submit', submitProduct);
+    $('categoryForm').addEventListener('submit', submitCategory);
+    $('resetProductBtn').addEventListener('click', resetProductForm);
+    $('resetCategoryBtn').addEventListener('click', resetCategoryForm);
+    $('productBrand').addEventListener('change', renderCategorySelect);
+
+    checkSession();
+  </script>
+</body>
+</html>
