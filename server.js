@@ -1,15 +1,3 @@
-/**
- * ANTON CRAFTEX - MAIN SERVER
- * ============================================================
- * Production-ready Node.js server with:
- *  - CPU clustering (uses all cores → handles 1000+ concurrent users)
- *  - Session-based cart (fixes cart persistence bug)
- *  - Rate limiting (prevents abuse)
- *  - Compression (faster page loads)
- *  - Security headers via helmet
- *  - Auto-restart on crash (via cluster or PM2)
- * ============================================================
- */
 
 require('dotenv').config();
 const cluster = require('cluster');
